@@ -34,6 +34,10 @@ public class CarController {
 
         cc.cars.add(new Volvo240(Color.gray, 0, 0));
 
+        cc.cars.add(new Saab95(Color.gray,0,100));
+
+        cc.cars.add(new Scania(Color.red,0,200));
+
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
 
@@ -48,10 +52,15 @@ public class CarController {
         public void actionPerformed(ActionEvent e) {
             for (CarModels car : cars) {
                 if (touchesWall(car)) {
+                    car.stopEngine();
                     car.turnLeft();
                     car.turnLeft();
+                    car.startEngine();
+
                 }
-                car.move();
+                else {
+                    car.move();
+                }
                 int x = (int) Math.round(car.getPositionX());
                 int y = (int) Math.round(car.getPositionY());
                 frame.drawPanel.moveIt(car.getModelName(), x, y);
@@ -70,8 +79,12 @@ public class CarController {
         int carSizeX = carImage.getWidth();
         int carSizeY = carImage.getHeight();
 
+        boolean collideTop = posY - car.getCurrentSpeed()<0 && car.getDirection()==2;
+        boolean collideBot = posY + carSizeY+ car.getCurrentSpeed()>frameHeight && car.getDirection()==0;
+        boolean collideLeft = posX - car.getCurrentSpeed()<0 && car.getDirection()==3;
+        boolean collideRight = posX + carSizeX+ car.getCurrentSpeed()>frameWidth && car.getDirection()==1;
 
-        return posX < 0 || posX+carSizeX > frameWidth || posY < 0 || posY+carSizeY > frameHeight;
+        return collideLeft || collideTop || collideBot || collideRight;
     }
 
     // Calls the gas method for each car once
@@ -88,6 +101,34 @@ public class CarController {
         for (CarModels car : cars
         ) {
             car.brake(brake);
+        }
+    }
+
+    void turboOn(){
+        for (CarModels car : cars){
+            if (car instanceof Saab95){
+                ((Saab95) car).setTurboOn();
+            }
+        }
+    }
+
+    void turboOff(){
+        for (CarModels car : cars){
+            if (car instanceof Saab95){
+                ((Saab95) car).setTurboOff();
+            }
+        }
+    }
+
+    void startEngine(){
+        for (CarModels car : cars){
+            car.startEngine();
+        }
+    }
+
+    void stopEngine(){
+        for (CarModels car : cars){
+            car.stopEngine();
         }
     }
 }

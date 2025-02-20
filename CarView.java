@@ -27,7 +27,7 @@ public class CarView extends JFrame{
     JPanel gasPanel = new JPanel();
     JSpinner gasSpinner = new JSpinner();
     int gasAmount = 0;
-    JLabel gasLabel = new JLabel("Amount of speed change");
+    JLabel gasLabel = new JLabel("Amount of speed");
 
     JButton gasButton = new JButton("Gas");
     JButton brakeButton = new JButton("Brake");
@@ -113,6 +113,34 @@ public class CarView extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 carC.brake(gasAmount);
+            }
+        });
+
+        turboOnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.turboOn();
+            }
+        });
+
+        turboOffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.turboOff();
+            }
+        });
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.startEngine();
+            }
+        });
+
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carC.stopEngine();
             }
         });
         // Make the frame pack all it's components by respecting the sizes if possible.
