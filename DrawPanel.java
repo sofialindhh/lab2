@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +10,15 @@ import javax.swing.*;
 
 public class DrawPanel extends JPanel {
 
-    // Car class representing a car with an image and position
-    private class Car {
+
+    // Car class representing a object with an image and position
+    public class ImageObjects {
         private String modelName;
         private BufferedImage image;
         private Point position;
+        private Boolean draw = true;
 
-        public Car(String modelName, BufferedImage image, int x, int y) {
+        public ImageObjects(String modelName, BufferedImage image, int x, int y) {
             this.modelName = modelName;
             this.image = image;
             this.position = new Point(x, y);
@@ -38,16 +39,28 @@ public class DrawPanel extends JPanel {
         public void setPosition(int x, int y) {
             this.position = new Point(x, y);
         }
+
+        public void swithcDraw(){
+            if (draw){
+                draw =false;
+            }
+            else{
+                draw =true;
+            }
+        }
+
+
     }
 
-    // Map to store all cars with their unique ID
-    private Map<String, Car> cars = new HashMap<>();
+    private Map<String, ImageObjects> cars = new HashMap<>();
 
-    // Images for different car models
     private BufferedImage volvoImage;
     private BufferedImage saabImage;
     private BufferedImage scaniaImage;
     private BufferedImage volvoWorkshopImage;
+    ImageObjects volvoWorkshop;
+
+
 
     // Initializes the panel and loads car images
     public DrawPanel(int x, int y) {
@@ -65,40 +78,39 @@ public class DrawPanel extends JPanel {
         }
 
         // Add cars with unique IDs
-        cars.put("Volvo240", new Car("Volvo240", volvoImage, 0, 0));
-        cars.put("Saab95", new Car("Saab95", saabImage, 0, 100));
-        cars.put("Scania", new Car("Scania", scaniaImage, 0, 200));
+        cars.put("Volvo240", new ImageObjects("Volvo240", volvoImage, 0, 0));
+        cars.put("Saab95", new ImageObjects("Saab95", saabImage, 0, 100));
+        cars.put("Scania", new ImageObjects("Scania", scaniaImage, 0, 200));
+
+        this.volvoWorkshop = new ImageObjects("VolvoWorkshop",volvoWorkshopImage,0,500);
+
+
     }
 
-    // This method moves a car to a new position using its unique ID
+
     public void moveIt(String id, int x, int y) {
-        Car car = cars.get(id);
+        ImageObjects car = cars.get(id);
         if (car != null) {
             car.setPosition(x, y);
         }
     }
 
-    // This method is called every time the panel updates/refreshes/repaints itself
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Draw each car by ID
-        for (Car car : cars.values()) {
-            g.drawImage(car.getImage(), car.getPosition().x, car.getPosition().y, null);
+        for (ImageObjects car : cars.values()) {
+            if (car.draw) {
+                g.drawImage(car.getImage(), car.getPosition().x, car.getPosition().y, null);
+            }
         }
 
-        // Optionally, draw the Volvo workshop image at a fixed position
-        g.drawImage(volvoWorkshopImage, 300, 300, null);
+        g.drawImage(volvoWorkshop.getImage(), volvoWorkshop.getPosition().x, volvoWorkshop.getPosition().y, null);
     }
 
-    public BufferedImage getCarImage(String id) {
-        Car car = cars.get(id);
-        return (car != null) ? car.getImage() : null;
+    public ImageObjects getImageObject(String id) {
+        return cars.get(id);
     }
 
-    // Getter to retrieve all cars (optional)
-    public Map<String, Car> getCars() {
-        return cars;
-    }
 }

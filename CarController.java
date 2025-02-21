@@ -26,6 +26,8 @@ public class CarController {
     // A list of cars, modify if needed
     ArrayList<CarModels> cars = new ArrayList<>();
 
+    Garage<Volvo240> volvoGarage = new Garage<>(10);
+
     //methods:
 
     public static void main(String[] args) {
@@ -41,6 +43,7 @@ public class CarController {
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
 
+
         // Start the timer
         cc.timer.start();
     }
@@ -49,6 +52,7 @@ public class CarController {
     * view to update its images. Change this method to your needs.
     * */
     private class TimerListener implements ActionListener {
+        private ArrayList<CarModels> toBeRemoved = new ArrayList<>();
         public void actionPerformed(ActionEvent e) {
             for (CarModels car : cars) {
                 if (touchesWall(car)) {
@@ -57,8 +61,10 @@ public class CarController {
                     car.turnLeft();
                     car.startEngine();
 
-                }
-                else {
+                } else if (touchesGarage(car) && car instanceof Volvo240) {
+                    volvoGarage.loadCar((Volvo240) car);
+                    toBeRemoved.add(car);
+                } else {
                     car.move();
                 }
                 int x = (int) Math.round(car.getPositionX());
@@ -67,13 +73,18 @@ public class CarController {
                 // repaint() calls the paintComponent method of the panel
                 frame.drawPanel.repaint();
             }
+            for (CarModels car : toBeRemoved) {
+                cars.remove(car);
+                frame.drawPanel.getImageObject(car.getModelName()).swithcDraw();
+            }
+            toBeRemoved.clear();
         }
     }
     private boolean touchesWall(CarModels car) {
         double posX = car.getPositionX();
         double posY = car.getPositionY();
 
-        BufferedImage carImage = frame.drawPanel.getCarImage(car.getModelName());
+        BufferedImage carImage = frame.drawPanel.getImageObject(car.getModelName()).getImage();
         int frameWidth = frame.drawPanel.getWidth();
         int frameHeight = frame.drawPanel.getHeight();
         int carSizeX = carImage.getWidth();
@@ -85,6 +96,27 @@ public class CarController {
         boolean collideRight = posX + carSizeX+ car.getCurrentSpeed()>frameWidth && car.getDirection()==1;
 
         return collideLeft || collideTop || collideBot || collideRight;
+    }
+
+    private boolean touchesGarage(CarModels car) {
+        DrawPanel.ImageObjects workshop = frame.drawPanel.volvoWorkshop;
+        double posX = car.getPositionX();
+        double posY = car.getPositionY();
+        double posGarageY = workshop.getPosition().y;
+        double posGarageX = workshop.getPosition().x;
+
+        BufferedImage carImage = frame.drawPanel.getImageObject(car.getModelName()).getImage();
+
+        int carSizeX = carImage.getWidth();
+        int carSizeY = carImage.getHeight();
+        int garageSizeW = workshop.getImage().getWidth();
+        int garageSizeH = workshop.getImage().getHeight();
+
+        boolean overlapX = (posX < posGarageX + garageSizeW) && (posX + carSizeX > posGarageX);
+        boolean overlapY = (posY < posGarageY + garageSizeH) && (posY + carSizeY > posGarageY);
+
+
+        return overlapX && overlapY;
     }
 
     // Calls the gas method for each car once
@@ -129,6 +161,22 @@ public class CarController {
     void stopEngine(){
         for (CarModels car : cars){
             car.stopEngine();
+        }
+    }
+
+    void raiseLorry(){
+        for (CarModels car:cars){
+            if (car instanceof Scania){
+                ((Scania) car).raiseLorry(10);
+            }
+        }
+    }
+
+    void lowerLorry(){
+        for (CarModels car:cars){
+            if (car instanceof Scania){
+                ((Scania) car).lowerLorry(10);
+            }
         }
     }
 }
