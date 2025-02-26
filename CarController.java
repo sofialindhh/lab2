@@ -164,18 +164,18 @@ public class CarController {
         }
     }
 
-    void raiseLorry(){
+    void tiltRamp(){
         for (CarModels car:cars){
             if (car instanceof Scania){
-                ((Scania) car).raiseLorry(10);
+                ((Scania) car).tiltRamp(10);
             }
         }
     }
 
-    void lowerLorry(){
+    void untiltRamp(){
         for (CarModels car:cars){
             if (car instanceof Scania){
-                ((Scania) car).lowerLorry(10);
+                ((Scania) car).untiltRamp(10);
             }
         }
     }
