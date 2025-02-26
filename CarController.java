@@ -12,7 +12,7 @@ import java.util.ArrayList;
 * modifying the model state and the updating the view.
  */
 
-public class CarController {
+public class CarController implements ButtonController{
     // member fields:
 
     // The delay (ms) corresponds to 20 updates a sec (hz)
@@ -120,15 +120,16 @@ public class CarController {
     }
 
     // Calls the gas method for each car once
-    void gas(int amount) {
+    @Override
+    public void gas(int amount) {
         double gas = ((double) amount) / 100;
         for (CarModels car : cars
                 ) {
             car.gas(gas);
         }
     }
-
-    void brake(int amount) {
+    @Override
+    public void brake(int amount) {
         double brake = ((double) amount) / 100;
         for (CarModels car : cars
         ) {
@@ -136,7 +137,8 @@ public class CarController {
         }
     }
 
-    void turboOn(){
+    @Override
+    public void turboOn(){
         for (CarModels car : cars){
             if (car instanceof Saab95){
                 ((Saab95) car).setTurboOn();
@@ -144,7 +146,8 @@ public class CarController {
         }
     }
 
-    void turboOff(){
+    @Override
+    public void turboOff(){
         for (CarModels car : cars){
             if (car instanceof Saab95){
                 ((Saab95) car).setTurboOff();
@@ -152,19 +155,22 @@ public class CarController {
         }
     }
 
-    void startEngine(){
+    @Override
+    public void startEngine(){
         for (CarModels car : cars){
             car.startEngine();
         }
     }
 
-    void stopEngine(){
+    @Override
+    public void stopEngine(){
         for (CarModels car : cars){
             car.stopEngine();
         }
     }
 
-    void tiltRamp(){
+    @Override
+    public void tiltRamp(){
         for (CarModels car:cars){
             if (car instanceof Scania){
                 ((Scania) car).tiltRamp(10);
@@ -172,7 +178,8 @@ public class CarController {
         }
     }
 
-    void untiltRamp(){
+    @Override
+    public void untiltRamp(){
         for (CarModels car:cars){
             if (car instanceof Scania){
                 ((Scania) car).untiltRamp(10);
