@@ -1,13 +1,14 @@
 import java.awt.*;
 
 public class Truck extends CarModels{
-    private boolean tilted;
+    //private boolean tilted;
 
     public Truck(Color color, String modelName, double positionX, double positionY) {
         super(2, 100, color, modelName, positionX, positionY);
-        this.tilted = false;
+        //this.tilted = false;
     }
 
+    /*
     public boolean isTilted(){
         return tilted;
     }
@@ -26,7 +27,6 @@ public class Truck extends CarModels{
         else {throw new IllegalStateException("Truck is moving");}
     }
 
-
     @Override
     public void gas(double amount) {
         if (! isTilted()){
@@ -34,6 +34,8 @@ public class Truck extends CarModels{
         }
         else {throw new IllegalArgumentException("The lorry is tilted");}
     }
+
+     */
 
     @Override
     protected double speedFactor() {

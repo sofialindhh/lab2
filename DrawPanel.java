@@ -12,47 +12,8 @@ public class DrawPanel extends JPanel {
 
 
     // Car class representing a object with an image and position
-    public class ImageObjects {
-        private String modelName;
-        private BufferedImage image;
-        private Point position;
-        private Boolean draw = true;
 
-        public ImageObjects(String modelName, BufferedImage image, int x, int y) {
-            this.modelName = modelName;
-            this.image = image;
-            this.position = new Point(x, y);
-        }
-
-        public String getId() {
-            return modelName;
-        }
-
-        public BufferedImage getImage() {
-            return image;
-        }
-
-        public Point getPosition() {
-            return position;
-        }
-
-        public void setPosition(int x, int y) {
-            this.position = new Point(x, y);
-        }
-
-        public void swithcDraw(){
-            if (draw){
-                draw =false;
-            }
-            else{
-                draw =true;
-            }
-        }
-
-
-    }
-
-    private Map<String, ImageObjects> cars = new HashMap<>();
+    private Map<String, ImageObjects> imgObjects = new HashMap<>();
 
     private BufferedImage volvoImage;
     private BufferedImage saabImage;
@@ -78,9 +39,9 @@ public class DrawPanel extends JPanel {
         }
 
         // Add cars with unique IDs
-        cars.put("Volvo240", new ImageObjects("Volvo240", volvoImage, 0, 0));
-        cars.put("Saab95", new ImageObjects("Saab95", saabImage, 0, 100));
-        cars.put("Scania", new ImageObjects("Scania", scaniaImage, 0, 200));
+        imgObjects.put("Volvo240", new ImageObjects("Volvo240", volvoImage, 0, 0));
+        imgObjects.put("Saab95", new ImageObjects("Saab95", saabImage, 0, 100));
+        imgObjects.put("Scania", new ImageObjects("Scania", scaniaImage, 0, 200));
 
         this.volvoWorkshop = new ImageObjects("VolvoWorkshop",volvoWorkshopImage,0,500);
 
@@ -89,7 +50,7 @@ public class DrawPanel extends JPanel {
 
 
     public void moveIt(String id, int x, int y) {
-        ImageObjects car = cars.get(id);
+        ImageObjects car = imgObjects.get(id);
         if (car != null) {
             car.setPosition(x, y);
         }
@@ -100,8 +61,8 @@ public class DrawPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for (ImageObjects car : cars.values()) {
-            if (car.draw) {
+        for (ImageObjects car : imgObjects.values()) {
+            if (car.ifDraw()) {
                 g.drawImage(car.getImage(), car.getPosition().x, car.getPosition().y, null);
             }
         }
@@ -110,7 +71,7 @@ public class DrawPanel extends JPanel {
     }
 
     public ImageObjects getImageObject(String id) {
-        return cars.get(id);
+        return imgObjects.get(id);
     }
 
 }

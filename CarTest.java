@@ -74,17 +74,18 @@ public class CarTest {
         Scania scania = new Scania(Color.blue, 0, 0);
         assertEquals(0, scania.getLorryAngle());
         double intialAngle = scania.getLorryAngle();
-        scania.tiltRamp(50);
+        scania.tiltRamp();
         double raisedAngle = scania.getLorryAngle();
         assertTrue(intialAngle < raisedAngle);
 
-        scania.untiltRamp(25);
+        scania.untiltRamp();
         double loweredAngle = scania.getLorryAngle();
         assertTrue(loweredAngle < raisedAngle);
 
-        scania.tiltRamp(100);
+        scania.tiltRamp();
         assertTrue(scania.getLorryAngle() <= 70);
-        scania.untiltRamp(110);
+        scania.untiltRamp();
+        scania.untiltRamp();
         assertTrue(scania.getLorryAngle() >= 0);
     }
 
@@ -92,11 +93,11 @@ public class CarTest {
     public void changeAngleSpeed() {
         Scania scania = new Scania(Color.magenta, 0, 0);
         scania.startEngine();
-        assertThrows(IllegalArgumentException.class, () -> scania.tiltRamp(10));
-        assertThrows(IllegalArgumentException.class, () -> scania.untiltRamp(10));
+        assertThrows(IllegalArgumentException.class, scania::tiltRamp);
+        assertThrows(IllegalArgumentException.class, scania::untiltRamp);
 
         scania.brake(1);
-        scania.tiltRamp(25);
+        scania.tiltRamp();
         assertThrows(IllegalArgumentException.class, () -> scania.gas(0.5));
     }
 

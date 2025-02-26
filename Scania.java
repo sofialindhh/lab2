@@ -1,13 +1,19 @@
 import java.awt.*;
 
-public class Scania extends Truck{
-    private int lorryAngle;
+public class Scania extends Truck implements RampI{
     private int maxAngle;
+    private RampC<Integer> scaniaRamp;
 
     public Scania(Color color, double positionX, double positionY){
         super(color, "Scania", positionX, positionY);
-        this.lorryAngle = 0;
         this.maxAngle = 70;
+        scaniaRamp = new RampC<>(0);
+
+    }
+
+    @Override
+    public boolean isTilted(){
+        return scaniaRamp.getRampstatus() >= 0;
     }
 
     public int getMaxAngle() {
@@ -15,28 +21,41 @@ public class Scania extends Truck{
     }
 
     public int getLorryAngle(){
-        return lorryAngle;
+        return scaniaRamp.getRampstatus();
     }
 
-    private boolean isAllowedToTilt(int untiltWith) {
+
+
+    /*private boolean isAllowedToTilt(int untiltWith) {
         return untiltWith >= 0 && !isDriving();
     }
+     */
 
-    public void tiltRamp(int tiltWith){
-        if (isAllowedToTilt(tiltWith)) {
-            lorryAngle = Math.min((getLorryAngle() + tiltWith), getMaxAngle());
-            super.tiltRamp();
+    @Override
+    public void tiltRamp(){
+        if (!isDriving()) {
+            scaniaRamp.setRampStatus(Math.min((scaniaRamp.getRampstatus() + 10), getMaxAngle()));
+            //super.tiltRamp();
         } else {
             throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
         }
     }
 
-    public void untiltRamp(int untiltWith){
-        if (isAllowedToTilt(untiltWith)) {
-            lorryAngle = Math.max((getLorryAngle() - untiltWith), 0);
-            super.untiltRamp();
+    @Override
+    public void untiltRamp(){
+        if (!isDriving()) {
+            scaniaRamp.setRampStatus(Math.max((scaniaRamp.getRampstatus() - 10), 0));
+            //super.untiltRamp();
         } else {
             throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
         }
+    }
+
+    @Override
+    public void gas(double amount) {
+        if (! isTilted()){
+            super.gas(amount);
+        }
+        else {throw new IllegalArgumentException("The lorry is tilted");}
     }
 }

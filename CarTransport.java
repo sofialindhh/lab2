@@ -1,12 +1,16 @@
+import org.junit.Test;
+
 import java.awt.*;
 import java.util.Stack;
 
-public class CarTransport extends Truck{
+public class CarTransport extends Truck implements RampI{
     private Stack<CarModels> loadedCars;
+    private RampC<Boolean> transportRamp;
 
     public CarTransport(Color color, double currentPositionX, double currentPositionY){
         super(color, "CarTransport", currentPositionX, currentPositionY);
         this.loadedCars = new Stack<>();
+        transportRamp = new RampC<>(false);
     }
 
     // tilted - true or false
@@ -62,6 +66,37 @@ public class CarTransport extends Truck{
            car.setCurrentPositionY(getPositionY());
         }
     }
+
+    @Override
+    public boolean isTilted(){
+        return transportRamp.getRampstatus();
+    }
+
+    @Override
+    public void tiltRamp() {
+        if (!isDriving()) {
+            transportRamp.setRampStatus(true);
+        }
+        else {throw new IllegalStateException("Truck is moving");}
+    }
+
+    public void untiltRamp() {
+        if (!isDriving()) {
+            transportRamp.setRampStatus(false);
+        }
+        else {throw new IllegalStateException("Truck is moving");}
+    }
+
+
+
+    @Override
+    public void gas(double amount) {
+        if (!isTilted()){
+            super.gas(amount);
+        }
+        else {throw new IllegalArgumentException("The lorry is tilted");}
+    }
+
 }
 
 

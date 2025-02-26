@@ -99,18 +99,20 @@ public class CarController implements ButtonController{
     }
 
     private boolean touchesGarage(CarModels car) {
-        DrawPanel.ImageObjects workshop = frame.drawPanel.volvoWorkshop;
+        Point workshopPos = frame.drawPanel.volvoWorkshop.getPosition();
+        BufferedImage workshopImage = frame.drawPanel.volvoWorkshop.getImage();
+
         double posX = car.getPositionX();
         double posY = car.getPositionY();
-        double posGarageY = workshop.getPosition().y;
-        double posGarageX = workshop.getPosition().x;
+        double posGarageY = workshopPos.y;
+        double posGarageX = workshopPos.x;
 
         BufferedImage carImage = frame.drawPanel.getImageObject(car.getModelName()).getImage();
 
         int carSizeX = carImage.getWidth();
         int carSizeY = carImage.getHeight();
-        int garageSizeW = workshop.getImage().getWidth();
-        int garageSizeH = workshop.getImage().getHeight();
+        int garageSizeW = workshopImage.getWidth();
+        int garageSizeH = workshopImage.getHeight();
 
         boolean overlapX = (posX < posGarageX + garageSizeW) && (posX + carSizeX > posGarageX);
         boolean overlapY = (posY < posGarageY + garageSizeH) && (posY + carSizeY > posGarageY);
@@ -173,7 +175,7 @@ public class CarController implements ButtonController{
     public void tiltRamp(){
         for (CarModels car:cars){
             if (car instanceof Scania){
-                ((Scania) car).tiltRamp(10);
+                ((Scania) car).tiltRamp();
             }
         }
     }
@@ -182,7 +184,7 @@ public class CarController implements ButtonController{
     public void untiltRamp(){
         for (CarModels car:cars){
             if (car instanceof Scania){
-                ((Scania) car).untiltRamp(10);
+                ((Scania) car).untiltRamp();
             }
         }
     }
