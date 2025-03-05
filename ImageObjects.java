@@ -1,16 +1,18 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class ImageObjects {
+public class ImageObjects implements Drawable{
     private String modelName;
     private BufferedImage image;
     private Point position;
     private Boolean draw = true;
+    private final CarApplication.ObjectType objectType;
 
-    public ImageObjects(String modelName, BufferedImage image, int x, int y) {
+    public ImageObjects(String modelName, BufferedImage image, int x, int y, CarApplication.ObjectType objectType) {
         this.modelName = modelName;
         this.image = image;
         this.position = new Point(x, y);
+        this.objectType = objectType;
     }
 
     public String getId() {
@@ -29,16 +31,18 @@ public class ImageObjects {
         this.position = new Point(x, y);
     }
 
-    public void swithcDraw(){
-        if (draw){
-            draw =false;
-        }
-        else{
-            draw =true;
-        }
+    public CarApplication.ObjectType getObjectType(){
+        return objectType;
     }
 
-    public boolean getDraw(){
+    @Override
+    public void updateDrawableState(){
+        draw = !draw;
+    }
+
+    @Override
+    public boolean getDrawableState(){
         return draw;
     }
+
 }
