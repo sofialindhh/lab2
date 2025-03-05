@@ -12,45 +12,6 @@ public class DrawPanel extends JPanel {
 
 
     // Car class representing a object with an image and position
-    public class ImageObjects {
-        private String modelName;
-        private BufferedImage image;
-        private Point position;
-        private Boolean draw = true;
-
-        public ImageObjects(String modelName, BufferedImage image, int x, int y) {
-            this.modelName = modelName;
-            this.image = image;
-            this.position = new Point(x, y);
-        }
-
-        public String getId() {
-            return modelName;
-        }
-
-        public BufferedImage getImage() {
-            return image;
-        }
-
-        public Point getPosition() {
-            return position;
-        }
-
-        public void setPosition(int x, int y) {
-            this.position = new Point(x, y);
-        }
-
-        public void swithcDraw(){
-            if (draw){
-                draw =false;
-            }
-            else{
-                draw =true;
-            }
-        }
-
-
-    }
 
     private Map<String, ImageObjects> cars = new HashMap<>();
 
@@ -101,7 +62,7 @@ public class DrawPanel extends JPanel {
         super.paintComponent(g);
 
         for (ImageObjects car : cars.values()) {
-            if (car.draw) {
+            if (car.getDraw()) {
                 g.drawImage(car.getImage(), car.getPosition().x, car.getPosition().y, null);
             }
         }

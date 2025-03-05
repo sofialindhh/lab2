@@ -1,8 +1,11 @@
 import java.awt.*;
 import java.util.Stack;
 
-public class CarTransport extends Truck{
+public class CarTransport extends Truck implements RampI{
     private Stack<CarModels> loadedCars;
+
+    private Ramp<Boolean> transportRamp = new Ramp<>(false);
+
 
     public CarTransport(Color color, double currentPositionX, double currentPositionY){
         super(color, "CarTransport", currentPositionX, currentPositionY);
@@ -61,6 +64,29 @@ public class CarTransport extends Truck{
            car.setCurrentPositionX(getPositionX());
            car.setCurrentPositionY(getPositionY());
         }
+    }
+
+    @Override
+    public void tiltRamp(){
+        if (!isDriving()) {
+            transportRamp.setRampStatus(true);
+        } else {
+            throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
+        }
+    }
+
+    @Override
+    public void untiltRamp(){
+        if (!isDriving()) {
+            transportRamp.setRampStatus(false);
+        } else {
+            throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
+        }
+    }
+
+    @Override
+    public boolean isTilted(){
+        return transportRamp.angle();
     }
 }
 

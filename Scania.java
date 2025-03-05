@@ -1,12 +1,11 @@
 import java.awt.*;
 
-public class Scania extends Truck{
-    private int lorryAngle;
+public class Scania extends Truck implements RampI<Integer>{
     private int maxAngle;
+    public Ramp<Integer> scaniaRamp = new Ramp<>(0);
 
     public Scania(Color color, double positionX, double positionY){
         super(color, "Scania", positionX, positionY);
-        this.lorryAngle = 0;
         this.maxAngle = 70;
     }
 
@@ -14,29 +13,47 @@ public class Scania extends Truck{
         return maxAngle;
     }
 
-    public int getLorryAngle(){
-        return lorryAngle;
-    }
 
     private boolean isAllowedToTilt(int untiltWith) {
         return untiltWith >= 0 && !isDriving();
     }
 
-    public void tiltRamp(int tiltWith){
-        if (isAllowedToTilt(tiltWith)) {
-            lorryAngle = Math.min((getLorryAngle() + tiltWith), getMaxAngle());
-            super.tiltRamp();
+    @Override
+    public void tiltRamp(){
+        if (isAllowedToTilt(10)) {
+            int newAngle = Math.min((scaniaRamp.angle() + 10), getMaxAngle());
+            scaniaRamp.setRampStatus(newAngle);
         } else {
             throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
         }
     }
 
-    public void untiltRamp(int untiltWith){
-        if (isAllowedToTilt(untiltWith)) {
-            lorryAngle = Math.max((getLorryAngle() - untiltWith), 0);
-            super.untiltRamp();
+    @Override
+    public void untiltRamp(){
+        if (isAllowedToTilt(10)) {
+            int newAngle = Math.max((scaniaRamp.angle() - 10), 0);
+            scaniaRamp.setRampStatus(newAngle);
         } else {
             throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
         }
+    }
+
+    @Override
+    public boolean isTilted(){
+        if (scaniaRamp.angle()>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
+    @Override
+    public void gas(double amount) {
+        if (! isTilted()){
+            super.gas(amount);
+        }
+        else {throw new IllegalArgumentException("The lorry is tilted");}
     }
 }
