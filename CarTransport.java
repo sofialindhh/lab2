@@ -7,8 +7,8 @@ public class CarTransport extends Truck implements RampI{
     private Ramp<Boolean> transportRamp = new Ramp<>(false);
 
 
-    public CarTransport(Color color, double currentPositionX, double currentPositionY){
-        super(color, "CarTransport", currentPositionX, currentPositionY);
+    public CarTransport(Color color, double currentPositionX, double currentPositionY, String id){
+        super(color, "CarTransport", currentPositionX, currentPositionY, id);
         this.loadedCars = new Stack<>();
     }
 

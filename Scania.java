@@ -4,8 +4,8 @@ public class Scania extends Truck implements RampI<Integer>{
     private int maxAngle;
     public Ramp<Integer> scaniaRamp = new Ramp<>(0);
 
-    public Scania(Color color, double positionX, double positionY){
-        super(color, "Scania", positionX, positionY);
+    public Scania(Color color, double positionX, double positionY, String id){
+        super(color, "Scania", positionX, positionY, id);
         this.maxAngle = 70;
     }
 
@@ -24,7 +24,7 @@ public class Scania extends Truck implements RampI<Integer>{
             int newAngle = Math.min((scaniaRamp.angle() + 10), getMaxAngle());
             scaniaRamp.setRampStatus(newAngle);
         } else {
-            throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
+            System.out.println("The vehicle is moving or amount is smaller than 0");
         }
     }
 
@@ -34,7 +34,7 @@ public class Scania extends Truck implements RampI<Integer>{
             int newAngle = Math.max((scaniaRamp.angle() - 10), 0);
             scaniaRamp.setRampStatus(newAngle);
         } else {
-            throw new IllegalArgumentException("The vehicle is moving or amount is smaller than 0");
+            System.out.println("The vehicle is moving or amount is smaller than 0");
         }
     }
 
@@ -54,6 +54,6 @@ public class Scania extends Truck implements RampI<Integer>{
         if (! isTilted()){
             super.gas(amount);
         }
-        else {throw new IllegalArgumentException("The lorry is tilted");}
+        else {System.out.println("The lorry is tilted");}
     }
 }

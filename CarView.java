@@ -27,6 +27,13 @@ public class CarView extends JFrame{
     int gasAmount = 0;
     JLabel gasLabel = new JLabel("Amount of speed");
 
+    JPanel carPanel = new JPanel();
+    JTextField idCar = new JTextField(6);
+    JLabel carLabel = new JLabel("Car id");
+    String[] options = {"Volvo", "Saab", "Scania"};
+    JComboBox <String> carType = new JComboBox<>(options);
+
+
     JButton gasButton = new JButton("Gas");
     JButton brakeButton = new JButton("Brake");
     JButton turboOnButton = new JButton("Saab Turbo on");
@@ -36,6 +43,9 @@ public class CarView extends JFrame{
 
     JButton startButton = new JButton("Start all cars");
     JButton stopButton = new JButton("Stop all cars");
+
+    JButton addCar = new JButton("Add car");
+    JButton removeCar = new JButton("Remove car");
 
     // Constructor
     public CarView(String framename,DrawPanel drawPanel){
@@ -70,8 +80,18 @@ public class CarView extends JFrame{
         gasPanel.setLayout(new BorderLayout());
         gasPanel.add(gasLabel, BorderLayout.PAGE_START);
         gasPanel.add(gasSpinner, BorderLayout.PAGE_END);
-
         this.add(gasPanel);
+
+        carPanel.setLayout(new GridLayout(5,1));
+        carPanel.add(carLabel, 0);
+        carPanel.add(idCar, 1);
+        carPanel.add(carType, 2);
+        carPanel.add(addCar, 3);
+        carPanel.add(removeCar,4);
+        this.add(carPanel);
+
+
+        JTextField idCar = new JTextField(6);
 
         controlPanel.setLayout(new GridLayout(2,4));
 

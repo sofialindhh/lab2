@@ -8,7 +8,7 @@ public class CarTest {
 
     @Test
     public void testSaab95Turbo() {
-        Saab95 saab = new Saab95(Color.red, 0, 0);
+        Saab95 saab = new Saab95(Color.red, 0, 0, "ABC123");
         assertEquals(0, saab.getCurrentSpeed());
         saab.setTurboOn();
         assertEquals(1.625, saab.speedFactor());
@@ -18,13 +18,13 @@ public class CarTest {
 
     @Test
     public void testVolvo240SpeedFactor() {
-        Volvo240 volvo = new Volvo240(Color.black, 0, 0);
+        Volvo240 volvo = new Volvo240(Color.black, 0, 0, "ABC123");
         assertEquals(1.25, volvo.speedFactor());
     }
 
     @Test
     public void testGasAndBrake() {
-        Volvo240 volvo = new Volvo240(Color.blue, 0, 0);
+        Volvo240 volvo = new Volvo240(Color.blue, 0, 0, "ABC123");
         volvo.startEngine();
         double initialSpeed = volvo.getCurrentSpeed();
         volvo.gas(0.5);
@@ -37,7 +37,7 @@ public class CarTest {
 
     @Test
     public void testGasAndBrakeLimits() {
-        Volvo240 volvo = new Volvo240(Color.green, 0, 0);
+        Volvo240 volvo = new Volvo240(Color.green, 0, 0, "ABC123");
         volvo.startEngine();
 
         // Test gas beyond limits
@@ -51,7 +51,7 @@ public class CarTest {
 
     @Test
     public void testMoveAndTurn() {
-        Saab95 saab = new Saab95(Color.red, 0, 0);
+        Saab95 saab = new Saab95(Color.red, 0, 0, "ABC123");
         saab.startEngine();
         saab.move();
         assertEquals(0.1, saab.getPositionY());
@@ -71,7 +71,7 @@ public class CarTest {
 
     @Test
     public void testLorryAngle() {
-        Scania scania = new Scania(Color.blue, 0, 0);
+        Scania scania = new Scania(Color.blue, 0, 0, "ABC123");
         assertEquals(0, scania.scaniaRamp.angle());
         double intialAngle = scania.scaniaRamp.angle();
         scania.tiltRamp();
@@ -90,7 +90,7 @@ public class CarTest {
 
     @Test
     public void changeAngleSpeed() {
-        Scania scania = new Scania(Color.magenta, 0, 0);
+        Scania scania = new Scania(Color.magenta, 0, 0, "ABC123");
         scania.startEngine();
         assertThrows(IllegalArgumentException.class, () -> scania.tiltRamp());
         assertThrows(IllegalArgumentException.class, () -> scania.untiltRamp());
@@ -102,7 +102,7 @@ public class CarTest {
 
     @Test
     public void lorryAngleCartransport(){
-        CarTransport carTransport = new CarTransport(Color.blue, 0, 0);
+        CarTransport carTransport = new CarTransport(Color.blue, 0, 0, "ABC123");
         assertFalse(carTransport.isTilted());
         carTransport.tiltRamp();
         assertTrue(carTransport.isTilted());
@@ -113,7 +113,7 @@ public class CarTest {
 
     @Test
     public void changeAngleSpeedCartransport() {
-        CarTransport carTransport = new CarTransport(Color.cyan, 0, 0);
+        CarTransport carTransport = new CarTransport(Color.cyan, 0, 0, "ABC123");
         carTransport.startEngine();
         assertThrows(IllegalStateException.class, carTransport::tiltRamp);
         assertThrows(IllegalStateException.class, carTransport::untiltRamp);
@@ -125,10 +125,10 @@ public class CarTest {
 
     @Test
     public void testLoadCars(){
-        CarTransport carTransport = new CarTransport(Color.black, 0, 0);
-        Volvo240 volvo240 = new Volvo240(Color.gray, 0, 0);
-        Saab95 saab95 = new Saab95(Color.red, 0, 0);
-        CarTransport carTransport2 = new CarTransport(Color.blue, 0, 0);
+        CarTransport carTransport = new CarTransport(Color.black, 0, 0, "ABC123");
+        Volvo240 volvo240 = new Volvo240(Color.gray, 0, 0, "AAA111");
+        Saab95 saab95 = new Saab95(Color.red, 0, 0, "BBB222");
+        CarTransport carTransport2 = new CarTransport(Color.blue, 0, 0, "CCC333");
         assertThrows(IllegalArgumentException.class, ()-> carTransport.loadCar(carTransport2));
         assertThrows(IllegalArgumentException.class, () -> carTransport.loadCar(volvo240));
         carTransport.tiltRamp();
@@ -141,9 +141,9 @@ public class CarTest {
 
     @Test
     public void testUnloadCarsAndPosition() {
-        CarTransport carTransport = new CarTransport(Color.black, 0, 0);
-        Volvo240 volvo240 = new Volvo240(Color.gray, 0, 0);
-        Saab95 saab95 = new Saab95(Color.red, 0, 0);
+        CarTransport carTransport = new CarTransport(Color.black, 0, 0, "ABC123");
+        Volvo240 volvo240 = new Volvo240(Color.gray, 0, 0, "AAA111");
+        Saab95 saab95 = new Saab95(Color.red, 0, 0, "BBB222");
         carTransport.tiltRamp();
         volvo240.startEngine();
         volvo240.move();
@@ -174,10 +174,10 @@ public class CarTest {
     @Test
     public void testGarage() {
         Garage<Saab95> garage = new Garage<>(2);
-        Saab95 saab = new Saab95(Color.red, 0, 0);
-        Saab95 saab2 = new Saab95(Color.blue, 0, 0);
-        Saab95 saab3 = new Saab95(Color.gray, 0, 0);
-        Volvo240 volvo = new Volvo240(Color.CYAN, 0, 0);
+        Saab95 saab = new Saab95(Color.red, 0, 0, "ABC123");
+        Saab95 saab2 = new Saab95(Color.blue, 0, 0, "AAA111");
+        Saab95 saab3 = new Saab95(Color.gray, 0, 0, "BBB222");
+        Volvo240 volvo = new Volvo240(Color.CYAN, 0, 0, "CCC333");
         garage.loadCar(saab);
         garage.loadCar(saab2);
         assertThrows(IllegalStateException.class, () -> garage.loadCar(saab3));
@@ -187,8 +187,8 @@ public class CarTest {
         assertThrows(IllegalStateException.class, () -> garage.unloadCar(saab3));
 
         Garage<CarModels> garageAll = new Garage<>(3);
-        CarTransport carTransport = new CarTransport(Color.gray, 0, 0);
-        Scania scania = new Scania(Color.GREEN, 0, 0);
+        CarTransport carTransport = new CarTransport(Color.gray, 0, 0, "CBA321");
+        Scania scania = new Scania(Color.GREEN, 0, 0, "CBA123");
         garageAll.loadCar(scania);
         garageAll.loadCar(carTransport);
         garageAll.loadCar(volvo);

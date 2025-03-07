@@ -8,9 +8,10 @@ public abstract class CarModels implements Movable {
     private String modelName; // The car model name
     private double currentPositionX;
     private double currentPositionY;
-    private int direction; // 0=upp 1=höger 2=ner 3=vänster
+    private int direction;// 0=upp 1=höger 2=ner 3=vänster
+    private String id;
 
-    protected CarModels(int nrDoors,double enginePower, Color color, String modelName, double currentPositionX, double currentPositionY) {
+    protected CarModels(int nrDoors,double enginePower, Color color, String modelName, double currentPositionX, double currentPositionY, String id) {
         this.nrDoors=nrDoors;
         this.enginePower=enginePower;
         this.color=color;
@@ -18,12 +19,15 @@ public abstract class CarModels implements Movable {
         this.currentPositionX= currentPositionX;
         this.currentPositionY= currentPositionY;
         this.direction=0;
+        this.id = id;
         stopEngine();
     }
 
     public String getModelName() {
         return modelName;
     }
+
+    public String getId() {return id;}
 
     @Override
     public void move(){

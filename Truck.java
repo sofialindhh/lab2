@@ -4,8 +4,8 @@ public class Truck extends CarModels{
 
 
 
-    public Truck(Color color, String modelName, double positionX, double positionY) {
-        super(2, 100, color, modelName, positionX, positionY);
+    public Truck(Color color, String modelName, double positionX, double positionY, String id) {
+        super(2, 100, color, modelName, positionX, positionY, id);
     }
 
     @Override

@@ -4,8 +4,8 @@ public class Saab95 extends CarModels{
 
     private boolean turboOn;
     
-    public Saab95(Color color, double positionX, double positionY){
-        super(2,125,color,"Saab95", positionX, positionY);
+    public Saab95(Color color, double positionX, double positionY, String id){
+        super(2,125,color,"Saab95", positionX, positionY, id);
         turboOn=false;
     }
 

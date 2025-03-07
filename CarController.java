@@ -6,6 +6,7 @@
  */
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,14 +15,14 @@ public class CarController{
 
     CarView cv;
     ArrayList<CarModels> cars;
+    GameModel gameModel;
 
-    protected CarController(CarView cv,ArrayList<CarModels> cars){
+    protected CarController(CarView cv,ArrayList<CarModels> cars, GameModel gameModel){
         this.cv=cv;
         this.cars=cars;
+        this.gameModel = gameModel;
         innitButtons();
     }
-
-
 
 
     private void innitButtons(){
@@ -106,6 +107,19 @@ public class CarController{
                         ((Scania) car).untiltRamp();
                     }
                 }
+            }
+        });
+
+        cv.addCar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    gameModel.addCar(cv.idCar.getText(), cv.carType.getSelectedItem().toString(),0, 0);
+            }
+        });
+        cv.removeCar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameModel.removeCar(cv.idCar.getText());
             }
         });
     }
