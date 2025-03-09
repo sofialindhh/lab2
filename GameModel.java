@@ -1,45 +1,45 @@
-import javax.imageio.ImageIO;
 import javax.swing.Timer;
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.*;
 
 public class GameModel {
     /*
-    skapa dessa
-
-
-    Håll metod som uppdaterar ModelUpdateListener när något uppdateras
-    Håll TimerListener
-    Håll metoder för att addCar, removeCar
-    istället för repaint i TimerListener, kör notifyListeners som då kallar på repaint via drawPanel
-     */
+    håller logik för hur spelet ska fungera, händelser vid kollisioner och en loop för själva programmet
+    */
 
     private final int delay = 50;
     private javax.swing.Timer timer = new Timer(delay, new TimerListener());
     private ArrayList<ModelUpdateListener> listeners = new ArrayList<>();
     private ArrayList<CarModels> cars = new ArrayList<>();
-    private Map<String, ImageObjects> imageObjects = new HashMap<>();
-    private Map<String, BufferedImage> images = new HashMap<>();
     private Garage<Volvo240> volvoGarage = Factory.createVolvoGarage(10);
 
-    private static BufferedImage volvoImage;
-    private static BufferedImage saabImage;
-    private static BufferedImage scaniaImage;
-    private static BufferedImage volvoWorkshopImage;
+    private Map<Garage, Point> garages = new HashMap<>();
 
-    public GameModel(Map<String, BufferedImage> images){
-        this.images = images;
-    }
 
 
     public void notifyListeners() {
         for (ModelUpdateListener listener: listeners){
             listener.updateModel();
+        }
+    }
+
+    public void notifyNewCar(String id, String carType, int posX, int posY){
+        for (ModelUpdateListener listener: listeners) {
+            listener.updateNewImage(id, carType, posX, posY);
+        }
+    }
+
+    public void notifyRemoveCar(String id) {
+        for (ModelUpdateListener listener:listeners) {
+            listener.updateRemoveImage(id);
+        }
+    }
+    public void notifyNewPosition(String id, int posX, int posY) {
+        for (ModelUpdateListener listener: listeners){
+            listener.updateNewPosition(id, posX, posY);
         }
     }
 
@@ -57,56 +57,59 @@ public class GameModel {
         public void actionPerformed(ActionEvent e) {
             for (CarModels car : cars) {
 
-                BufferedImage carImage = imageObjects.get(car.getId()).getImage();
+                //BufferedImage carImage = imageObjects.get(car.getId()).getImage();
 
                 int frameWidth = 800;
                 int frameHeight = 560;
-                int carSizeX = carImage.getWidth();
-                int carSizeY = carImage.getHeight();
+                int carSizeX = 100;
+                int carSizeY = 60;
+                int garageSizeX = 100;
+                int garageSizeY = 60;
 
-                if (CollisionModel.touchesWall(car, frameWidth, frameHeight, carSizeX, carSizeY)) {
+
+                if (CollisionModel.touchesWall(car, frameWidth, frameHeight, 100, 60)) {
                     car.stopEngine();
                     car.turnLeft();
                     car.turnLeft();
                     car.startEngine();
 
-                } else if (CollisionModel.touchesGarage(car, imageObjects) && car instanceof Volvo240) {
+                } else if (CollisionModel.touchesGarage(car, garages, 100, 60, 100, 60) && car instanceof Volvo240) {
+                    System.out.println("load car");
                     volvoGarage.loadCar((Volvo240) car);
                     toBeRemoved.add(car);
+
                 } else {
                     car.move();
+
                 }
                 int x = (int) Math.round(car.getPositionX());
                 int y = (int) Math.round(car.getPositionY());
 
-                imageObjects.get(car.getId()).setPosition(x, y);
+
+                notifyNewPosition(car.getId(), x, y);
                 // repaint() calls the paintComponent method of the panel
                 notifyListeners();
             }
+
             for (CarModels car : toBeRemoved) {
                 cars.remove(car);
-                imageObjects.get(car.getId()).updateDrawableState();
+                notifyRemoveCar(car.getId());
             }
             toBeRemoved.clear();
         }
     }
 
     public void addCar(String id, String carType, int posX, int posY) {
-        BufferedImage carImage = images.get(carType);
-
         if (cars.size() < 10) {
             if (Objects.equals(carType, "Volvo")) {
                 cars.add(Factory.createVolvo(Color.gray, posX, posY, id));
-                imageObjects.put(id, new ImageObjects("Volvo240", carImage, posX, posY, CarApplication.ObjectType.vehicle));
             } else if (Objects.equals(carType, "Saab")) {
                 cars.add(Factory.createSaab(Color.gray, posX, posY, id));
-                imageObjects.put(id, new ImageObjects("Saab95", carImage, posX, posY, CarApplication.ObjectType.vehicle));
             } else {
                 cars.add(Factory.createScania(Color.red, posX, posY, id));
-                imageObjects.put(id, new ImageObjects("Scania", carImage, posX, posY, CarApplication.ObjectType.vehicle));
             }
         }
-        notifyListeners();
+        notifyNewCar(id, carType, posX, posY);
     }
 
     public void removeCar(String id) {
@@ -118,27 +121,23 @@ public class GameModel {
                     toBeRemoved.add(car);
                 }
             }
+
             for (CarModels car: toBeRemoved){
                 cars.remove(car);
-                imageObjects.remove(car.getId());
             }
             toBeRemoved.clear();
         }
         else {throw new RuntimeException("No cars left");
         }
-        notifyListeners();
+        notifyRemoveCar(id);
     }
+
+
     public void addVolvoGarage(String id, int posX, int posY){
-        BufferedImage carImage = images.get(id);
-
-        Factory.createVolvoGarage(10);
-        imageObjects.put(id, new ImageObjects(id, carImage, posX, posY, CarApplication.ObjectType.garage));
-        notifyListeners();
+        garages.put(Factory.createVolvoGarage(10), new Point(posX, posY));
+        notifyNewCar(id, "VolvoWorkshop", posX, posY);
     }
 
-    public Map<String, ImageObjects> getImageObjects(){
-        return imageObjects;
-    }
 
     public ArrayList<CarModels> getCars() {
         return cars;

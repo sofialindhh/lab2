@@ -32,15 +32,6 @@ public class CarApplication {
     // A list of cars, modify if needed
     static ArrayList<CarModels> cars = new ArrayList<>();
 
-
-    private static Map<String, BufferedImage> images = new HashMap<>();
-
-
-    private static BufferedImage volvoImage;
-    private static BufferedImage saabImage;
-    private static BufferedImage scaniaImage;
-    private static BufferedImage volvoWorkshopImage;
-
     public enum ObjectType {vehicle, garage}
 
     private ObjectType objectType;
@@ -53,26 +44,12 @@ public class CarApplication {
     }
 
     public void start() {
-        GameModel gameModel = new GameModel(images);
-
-        try {
-            // Load car images from resources
-            volvoImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Volvo240.jpg"));
-            saabImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg"));
-            scaniaImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg"));
-            volvoWorkshopImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        images.put("Volvo", volvoImage);
-        images.put("Saab", saabImage);
-        images.put("Scania", scaniaImage);
-        images.put("VolvoWorkshop", volvoWorkshopImage);
+        GameModel gameModel = new GameModel();
 
 
-        Map<String, ImageObjects> images = gameModel.getImageObjects();
-        DrawPanel drawPanel = new DrawPanel(X, Y - 240, images);
+
+
+        DrawPanel drawPanel = new DrawPanel(X, Y - 240);
         frame = new CarView("CarSim 1.0", drawPanel);
 
 
