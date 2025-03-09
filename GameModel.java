@@ -74,7 +74,6 @@ public class GameModel {
                     car.startEngine();
 
                 } else if (CollisionModel.touchesGarage(car, garages, 100, 60, 100, 60) && car instanceof Volvo240) {
-                    System.out.println("load car");
                     volvoGarage.loadCar((Volvo240) car);
                     toBeRemoved.add(car);
 
