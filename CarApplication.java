@@ -1,14 +1,5 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+
 
 public class CarApplication {
 
@@ -46,15 +37,12 @@ public class CarApplication {
     public void start() {
         GameModel gameModel = new GameModel();
 
-
-
-
         DrawPanel drawPanel = new DrawPanel(X, Y - 240);
-        frame = new CarView("CarSim 1.0", drawPanel);
-
 
         gameModel.addListener(drawPanel);
-        CarController controller = new CarController(frame, gameModel.getCars(), gameModel);
+        CarController controller = new CarController( gameModel.getCars(), gameModel);
+        frame = new CarView("CarSim 1.0", drawPanel, controller);
+
 
         gameModel.addCar("ABC123", "Volvo", 0, 0);
         gameModel.addCar("CBA321", "Saab", 0, 100);
